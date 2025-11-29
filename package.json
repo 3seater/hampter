@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "find-duplicates": "node scripts/find-duplicates.js"
+    "find-duplicates": "node scripts/find-duplicates.js",
+    "clear-firebase": "node scripts/clear-firebase-data.js"
   },
   "dependencies": {
     "firebase": "^12.6.0",
