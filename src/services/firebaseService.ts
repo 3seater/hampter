@@ -42,32 +42,48 @@ export const addComment = async (comment: {
   imageUrl?: string
   parentId?: string
 }) => {
-  const commentsRef = collection(db, 'comments')
-  const newComment = {
-    ...comment,
-    timestamp: serverTimestamp(),
-    likes: 0,
-    likedBy: [],
-    replies: []
-  }
-  
-  const docRef = await addDoc(commentsRef, newComment)
-  
-  // Update comment count
-  const statsRef = doc(db, 'videoStats', 'main')
-  await updateDoc(statsRef, {
-    'comments.count': increment(1)
-  })
-  
-  // If it's a reply, add to parent's replies array
-  if (comment.parentId) {
-    const parentRef = doc(db, 'comments', comment.parentId)
-    await updateDoc(parentRef, {
-      replies: arrayUnion(docRef.id)
+  try {
+    const commentsRef = collection(db, 'comments')
+    const newComment = {
+      ...comment,
+      timestamp: serverTimestamp(),
+      likes: 0,
+      likedBy: [],
+      replies: []
+    }
+    
+    const docRef = await addDoc(commentsRef, newComment)
+    
+    // Initialize videoStats if it doesn't exist
+    const statsRef = doc(db, 'videoStats', 'main')
+    const statsSnap = await getDoc(statsRef)
+    
+    if (!statsSnap.exists()) {
+      await setDoc(statsRef, {
+        likes: { count: 0, likedBy: [] },
+        comments: { count: 0 },
+        bookmarks: { count: 0, bookmarkedBy: [] }
+      })
+    }
+    
+    // Update comment count
+    await updateDoc(statsRef, {
+      'comments.count': increment(1)
     })
+    
+    // If it's a reply, add to parent's replies array
+    if (comment.parentId) {
+      const parentRef = doc(db, 'comments', comment.parentId)
+      await updateDoc(parentRef, {
+        replies: arrayUnion(docRef.id)
+      })
+    }
+    
+    return docRef.id
+  } catch (error) {
+    console.error('Firebase error adding comment:', error)
+    throw error
   }
-  
-  return docRef.id
 }
 
 export const subscribeToComments = (callback: (comments: any[]) => void) => {
@@ -107,20 +123,30 @@ export const toggleCommentLike = async (commentId: string, username: string, isL
 
 // Video stats
 export const getVideoStats = async () => {
-  const statsRef = doc(db, 'videoStats', 'main')
-  const statsSnap = await getDoc(statsRef)
-  
-  if (statsSnap.exists()) {
-    return statsSnap.data()
-  } else {
-    // Initialize stats if they don't exist
-    const initialStats = {
+  try {
+    const statsRef = doc(db, 'videoStats', 'main')
+    const statsSnap = await getDoc(statsRef)
+    
+    if (statsSnap.exists()) {
+      return statsSnap.data()
+    } else {
+      // Initialize stats if they don't exist
+      const initialStats = {
+        likes: { count: 0, likedBy: [] },
+        comments: { count: 0 },
+        bookmarks: { count: 0, bookmarkedBy: [] }
+      }
+      await setDoc(statsRef, initialStats)
+      return initialStats
+    }
+  } catch (error) {
+    console.error('Firebase error getting video stats:', error)
+    // Return default stats on error
+    return {
       likes: { count: 0, likedBy: [] },
       comments: { count: 0 },
       bookmarks: { count: 0, bookmarkedBy: [] }
     }
-    await setDoc(statsRef, initialStats)
-    return initialStats
   }
 }
 

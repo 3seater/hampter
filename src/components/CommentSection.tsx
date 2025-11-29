@@ -136,8 +136,10 @@ const CommentSection = ({ username }: CommentSectionProps) => {
       
       setReplyingTo(null)
       setCommentText('')
-    } catch (error) {
+      setShowHamsterPicker(false)
+    } catch (error: any) {
       console.error('Error adding comment:', error)
+      alert(`Error posting comment: ${error.message || 'Please make sure Firestore is enabled in Firebase Console'}`)
     } finally {
       setIsPosting(false)
     }

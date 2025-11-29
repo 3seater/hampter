@@ -1,15 +1,15 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 
-// Your web app's Firebase configuration
-// Replace these with your actual Firebase config values
+// Firebase configuration
+// Note: Firebase web API keys are safe to expose - security is handled by Firestore rules
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "your-api-key",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "your-project.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "your-project-id",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "your-project.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:abc123"
+  apiKey: "AIzaSyCH6ZVqC8uJAJ3T2zV2ul1Mx3saNKh56DY",
+  authDomain: "hampter-f9faa.firebaseapp.com",
+  projectId: "hampter-f9faa",
+  storageBucket: "hampter-f9faa.firebasestorage.app",
+  messagingSenderId: "665013220158",
+  appId: "1:665013220158:web:295b03039b861c7244f26f"
 }
 
 // Initialize Firebase
