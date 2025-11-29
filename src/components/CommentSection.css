@@ -4,13 +4,13 @@
   background: #0d0d0d;
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: relative; /* For absolute positioning of minimize button */
   overflow-y: auto; /* Make entire section scrollable */
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
-/* Minimize button at top - centered */
+/* Minimize button at top - centered, overlays without affecting layout */
 .minimize-top-btn {
   width: 50px;
   height: 6px;
@@ -19,25 +19,28 @@
   border-radius: 3px;
   cursor: pointer;
   padding: 0;
-  margin: 12px auto;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
   outline: none;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 10;
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  pointer-events: auto;
 }
 
 .minimize-top-btn:hover {
   background: rgba(255, 255, 255, 0.6);
-  transform: scale(1.1);
+  transform: translateX(-50%) scale(1.1);
 }
 
 .minimize-top-btn:active {
   background: rgba(255, 255, 255, 0.7);
-  transform: scale(0.95);
+  transform: translateX(-50%) scale(0.95);
 }
 
 .minimize-top-btn svg {
@@ -399,6 +402,24 @@
     -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     display: flex;
     flex-direction: column;
+    position: relative; /* For absolute positioning of minimize button */
+  }
+
+  .minimize-top-btn {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    pointer-events: auto;
+  }
+
+  .minimize-top-btn:hover {
+    transform: translateX(-50%) scale(1.1);
+  }
+
+  .minimize-top-btn:active {
+    transform: translateX(-50%) scale(0.95);
   }
 
   .profile-section {
