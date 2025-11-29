@@ -32,9 +32,10 @@ interface Comment {
 interface CommentSectionProps {
   username: string | null
   inputRef?: React.RefObject<HTMLInputElement | null>
+  onOpen?: () => void
 }
 
-const CommentSection = ({ username, inputRef }: CommentSectionProps) => {
+const CommentSection = ({ username, inputRef, onOpen }: CommentSectionProps) => {
   const [isFollowing, setIsFollowing] = useState(false)
   const [videoStats, setVideoStats] = useState({
     likes: { count: 0, liked: false },
@@ -328,14 +329,16 @@ const CommentSection = ({ username, inputRef }: CommentSectionProps) => {
             </div>
             <div className="stat-count">{videoStats.likes.count}</div>
           </div>
-          <div className="stat-item">
-            <div className="stat-icon-wrapper">
-              <svg className="stat-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="white"/>
-              </svg>
-            </div>
-            <div className="stat-count">{videoStats.comments.count}</div>
-          </div>
+              <div className="stat-item" onClick={() => {
+                if (onOpen) onOpen()
+              }} style={{ cursor: 'pointer' }}>
+                <div className="stat-icon-wrapper">
+                  <svg className="stat-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="white"/>
+                  </svg>
+                </div>
+                <div className="stat-count">{videoStats.comments.count}</div>
+              </div>
           <div className="stat-item" onClick={toggleBookmark} style={{ cursor: 'pointer' }}>
             <div className="stat-icon-wrapper" style={{ background: videoStats.bookmarks.bookmarked ? '#fe2c55' : '#1b1b1b' }}>
               <svg className="stat-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

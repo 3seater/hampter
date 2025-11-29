@@ -65,9 +65,16 @@ function App() {
 
         {/* Right sidebar with comments */}
         <div className={`sidebar ${commentsOpen ? 'open' : ''}`}>
-          <CommentSection 
+          <CommentSection
             username={username}
             inputRef={commentInputRef}
+            onOpen={() => {
+              setCommentsOpen(true)
+              // Focus input after a short delay to ensure sidebar is expanded
+              setTimeout(() => {
+                commentInputRef.current?.focus()
+              }, 300)
+            }}
           />
         </div>
       </div>
