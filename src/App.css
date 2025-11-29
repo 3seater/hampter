@@ -136,4 +136,87 @@ body {
     height: calc(100dvh * 0.2) !important;
     max-height: calc(100dvh * 0.2) !important;
   }
+
+  /* When comments are minimized, show only a small tab */
+  .sidebar.minimized {
+    flex: 0 0 50px !important;
+    height: 50px !important;
+    max-height: 50px !important;
+    min-height: 50px !important;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    overflow: visible;
+  }
+
+  .tiktok-layout.comments-minimized .video-container {
+    flex: 0 0 calc(100% - 50px) !important;
+    height: calc(100dvh - 50px) !important;
+    max-height: calc(100dvh - 50px) !important;
+  }
+
+  /* Fallback for browsers that support :has() */
+  .tiktok-layout:has(.sidebar.minimized) .video-container {
+    flex: 0 0 calc(100% - 50px) !important;
+    height: calc(100dvh - 50px) !important;
+    max-height: calc(100dvh - 50px) !important;
+  }
+
+  /* Maximize tab button */
+  .maximize-tab {
+    width: 100%;
+    height: 100%;
+    background: #0d0d0d;
+    border: none;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s;
+    outline: none;
+  }
+
+  .maximize-tab:hover {
+    background: #1a1a1a;
+  }
+
+  .maximize-tab:active {
+    background: #2a2a2a;
+  }
+
+  .maximize-tab svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Minimize button in header */
+  .minimize-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s;
+    outline: none;
+  }
+
+  .minimize-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .minimize-btn:focus,
+  .minimize-btn:active {
+    outline: none;
+  }
 }

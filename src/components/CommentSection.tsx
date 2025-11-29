@@ -33,10 +33,11 @@ interface CommentSectionProps {
   username: string | null
   inputRef?: React.RefObject<HTMLInputElement | null>
   onClose?: () => void
+  onMinimize?: () => void
   onExpandComments?: () => void
 }
 
-const CommentSection = ({ username, inputRef, onClose, onExpandComments }: CommentSectionProps) => {
+const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComments }: CommentSectionProps) => {
   const [isFollowing, setIsFollowing] = useState(false)
   const [videoStats, setVideoStats] = useState({
     likes: { count: 0, liked: false },
@@ -375,19 +376,32 @@ const CommentSection = ({ username, inputRef, onClose, onExpandComments }: Comme
       {/* Comments header */}
       <div className="comments-header">
         <span className="comments-count">{videoStats.comments.count} comments</span>
-        <button className="close-comments-btn" onClick={() => {
-          // Close comments and return to normal view
-          if (onClose) {
-            // Scroll to top to show profile section
-            const commentSection = document.querySelector('.comment-section') as HTMLElement
-            if (commentSection) {
-              commentSection.scrollTo({ top: 0, behavior: 'smooth' })
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          {onMinimize && (
+            <button 
+              className="minimize-btn" 
+              onClick={onMinimize}
+              title="Minimize"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 13H5v-2h14v2z" fill="white"/>
+              </svg>
+            </button>
+          )}
+          <button className="close-comments-btn" onClick={() => {
+            // Close comments and return to normal view
+            if (onClose) {
+              // Scroll to top to show profile section
+              const commentSection = document.querySelector('.comment-section') as HTMLElement
+              if (commentSection) {
+                commentSection.scrollTo({ top: 0, behavior: 'smooth' })
+              }
+              onClose()
             }
-            onClose()
-          }
-        }}>
-          ✕
-        </button>
+          }}>
+            ✕
+          </button>
+        </div>
       </div>
 
       {/* Comments list */}
