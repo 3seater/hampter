@@ -193,30 +193,4 @@ body {
     height: 24px;
   }
 
-  /* Minimize button in header */
-  .minimize-btn {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 4px 8px;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: background 0.2s;
-    outline: none;
-  }
-
-  .minimize-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .minimize-btn:focus,
-  .minimize-btn:active {
-    outline: none;
-  }
 }

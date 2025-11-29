@@ -10,6 +10,48 @@
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
+/* Minimize button at top - centered */
+.minimize-top-btn {
+  width: 50px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 0;
+  margin: 12px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  outline: none;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.minimize-top-btn:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(1.1);
+}
+
+.minimize-top-btn:active {
+  background: rgba(255, 255, 255, 0.7);
+  transform: scale(0.95);
+}
+
+.minimize-top-btn svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  position: absolute;
+}
+
+.minimize-top-btn:hover svg {
+  opacity: 1;
+}
+
 /* Profile Section */
 .profile-section {
   padding: 20px;
