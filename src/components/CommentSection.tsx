@@ -378,6 +378,11 @@ const CommentSection = ({ username, inputRef, onClose, onExpandComments }: Comme
         <button className="close-comments-btn" onClick={() => {
           // Close comments and return to normal view
           if (onClose) {
+            // Scroll to top to show profile section
+            const commentSection = document.querySelector('.comment-section') as HTMLElement
+            if (commentSection) {
+              commentSection.scrollTo({ top: 0, behavior: 'smooth' })
+            }
             onClose()
           }
         }}>

@@ -73,7 +73,8 @@ body {
     position: relative;
     height: 100vh; /* Fallback */
     height: 100dvh; /* Dynamic viewport height for Safari - exactly fits above browser bar */
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     max-height: 100dvh;
     box-sizing: border-box;
     margin: 0;
@@ -107,7 +108,7 @@ body {
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     z-index: 2;
-    overflow: hidden;
+    overflow: visible; /* Allow content to be visible and scrollable */
     flex-shrink: 0;
     min-height: 0;
     box-sizing: border-box;
