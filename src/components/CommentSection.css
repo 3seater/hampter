@@ -233,12 +233,61 @@
   background: #2f2f2f;
 }
 
+.copy-btn:hover {
+  border-color: #fe2c55; /* TikTok pink outline on hover */
+}
+
+.copy-btn:focus,
+.copy-btn:active {
+  outline: none;
+  border-color: #2f2f2f; /* keep same border, no white focus ring */
+  box-shadow: none;
+}
+
+.follow-btn.following {
+  background: #3a3a3a;
+  color: white;
+}
+
+.follow-btn.following:hover {
+  background: #4a4a4a;
+}
+
 /* Comments Header */
 .comments-header {
   padding: 16px 20px;
   border-bottom: 1px solid #2f2f2f;
   background: #0d0d0d;
   flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-comments-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+  outline: none;
+}
+
+.close-comments-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.close-comments-btn:focus,
+.close-comments-btn:active {
+  outline: none;
 }
 
 .tab {
@@ -428,6 +477,20 @@
   z-index: 100;
 }
 
+/* Mobile overlay styling when used inside comments overlay */
+@media (max-width: 768px), (max-width: 1200px) {
+  .comments-overlay .comment-input-bottom {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    right: 0;
+    padding: 12px 16px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    background: white;
+    border-top: 0.5px solid rgba(22, 24, 35, 0.12);
+  }
+}
+
 .comment-text-input {
   flex: 1;
   background: #1b1b1b;
@@ -586,31 +649,111 @@
 }
 
 /* Responsive design */
-@media (max-width: 768px) {
-  .comment-section {
+/* Mobile overlay styling when used inside comments overlay */
+@media (max-width: 768px), (max-width: 1200px) {
+  .comments-overlay .comment-section {
     width: 100%;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 50vh;
-    border-left: none;
-    border-top: 1px solid #2f2f2f;
+    height: 100%;
+    position: relative;
+    background: white;
   }
 
-  .profile-section {
+  .comments-overlay .profile-section {
     padding: 16px;
+    display: none; /* Hide profile section on mobile */
   }
 
-  .comments-header {
+  .comments-overlay .comments-header {
+    padding: 16px;
+    border-bottom: 0.5px solid rgba(22, 24, 35, 0.12);
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .comments-overlay .comments-header .comments-count {
+    font-size: 16px;
+    font-weight: 600;
+    color: #161823;
+  }
+
+  .comments-overlay .comments-header .close-btn {
+    position: absolute;
+    right: 16px;
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #161823;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.2s;
+  }
+
+  .comments-overlay .comments-header .close-btn:hover {
+    background: rgba(22, 24, 35, 0.06);
+  }
+
+  .comments-overlay .comment-item {
     padding: 12px 16px;
+    border-bottom: 1px solid rgba(22, 24, 35, 0.08);
   }
 
-  .comment-item {
+  .comments-overlay .comment-username {
+    color: #161823;
+  }
+
+  .comments-overlay .comment-text {
+    color: #161823;
+  }
+
+  .comments-overlay .comment-timestamp {
+    color: rgba(22, 24, 35, 0.5);
+  }
+
+  .comments-overlay .reply-btn, .comments-overlay .view-replies-btn {
+    color: rgba(22, 24, 35, 0.5);
+  }
+
+  .comments-overlay .reply-btn:hover, .comments-overlay .view-replies-btn:hover {
+    color: rgba(22, 24, 35, 0.75);
+  }
+
+  .comments-overlay .like-count {
+    color: rgba(22, 24, 35, 0.75);
+  }
+
+  .comments-overlay .comment-input-bottom {
+    width: 100%;
     padding: 12px 16px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    background: white;
+    border-top: 0.5px solid rgba(22, 24, 35, 0.12);
   }
 
-  .comment-input-bottom {
-    padding: 10px 12px;
+  .comments-overlay .comment-text-input {
+    background: rgba(22, 24, 35, 0.06);
+    color: #161823;
+  }
+
+  .comments-overlay .comment-text-input:focus {
+    background: white;
+    border-color: rgba(22, 24, 35, 0.2);
+  }
+
+  .comments-overlay .comment-text-input::placeholder {
+    color: rgba(22, 24, 35, 0.4);
+  }
+
+  .comments-overlay .engagement-stats {
+    display: none; /* Hide engagement stats on mobile (shown on video) */
+  }
+
+  .comments-overlay .copy-link-section {
+    display: none; /* Hide copy link on mobile */
   }
 }

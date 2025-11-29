@@ -31,14 +31,31 @@ interface Comment {
 
 interface CommentSectionProps {
   username: string | null
+  onClose?: () => void
+  isMobile?: boolean
 }
 
-const CommentSection = ({ username }: CommentSectionProps) => {
+const CommentSection = ({ username, onClose, isMobile }: CommentSectionProps) => {
+  const [isFollowing, setIsFollowing] = useState(false)
   const [videoStats, setVideoStats] = useState({
     likes: { count: 0, liked: false },
     comments: { count: 0 },
     bookmarks: { count: 0, bookmarked: false }
   })
+
+  // Load follow state from localStorage
+  useEffect(() => {
+    const storedFollow = localStorage.getItem('hampter_is_following')
+    if (storedFollow === 'true') {
+      setIsFollowing(true)
+    }
+  }, [])
+
+  const toggleFollow = () => {
+    const next = !isFollowing
+    setIsFollowing(next)
+    localStorage.setItem('hampter_is_following', next ? 'true' : 'false')
+  }
   // Subscribe to video stats
   useEffect(() => {
     if (!username) return
@@ -88,6 +105,7 @@ const CommentSection = ({ username }: CommentSectionProps) => {
   const [isAtBottom, setIsAtBottom] = useState(true)
   const [showJumpToBottom, setShowJumpToBottom] = useState(false)
   const [commentText, setCommentText] = useState('')
+  const [copyButtonText, setCopyButtonText] = useState('Copy link')
   const commentsListRef = useRef<HTMLDivElement>(null)
   const textInputRef = useRef<HTMLInputElement>(null)
 
@@ -261,6 +279,10 @@ const CommentSection = ({ username }: CommentSectionProps) => {
 
   const copyLink = () => {
     navigator.clipboard.writeText('https://hampter.xyz')
+    setCopyButtonText('Copied')
+    setTimeout(() => {
+      setCopyButtonText('Copy link')
+    }, 5000)
   }
 
   return (
@@ -278,7 +300,12 @@ const CommentSection = ({ username }: CommentSectionProps) => {
                 <div className="post-date">{new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' })}</div>
               </div>
             </div>
-            <button className="follow-btn">Follow</button>
+            <button
+              className={`follow-btn ${isFollowing ? 'following' : ''}`}
+              onClick={toggleFollow}
+            >
+              {isFollowing ? 'Following' : 'Follow'}
+            </button>
           </div>
 
           <div className="caption">
@@ -334,13 +361,20 @@ const CommentSection = ({ username }: CommentSectionProps) => {
         {/* Copy link section */}
         <div className="copy-link-section">
           <div className="link-display">https://hampter.xyz</div>
-          <button className="copy-btn" onClick={copyLink}>Copy link</button>
+          <button className="copy-btn" onClick={copyLink}>{copyButtonText}</button>
         </div>
       </div>
 
       {/* Comments header */}
       <div className="comments-header">
-        <div className="tab active">Comments ({videoStats.comments.count})</div>
+        <span className="comments-count">{videoStats.comments.count} comments</span>
+        {isMobile && onClose && (
+          <button className="close-btn" onClick={onClose}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          </button>
+        )}
       </div>
 
       {/* Comments list */}
