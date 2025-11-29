@@ -118,21 +118,21 @@ body {
 
   /* When comments are opened, expand sidebar and shrink video */
   .sidebar.open {
-    flex: 0 0 80%;
-    height: calc(100dvh * 0.8); /* 80% of dynamic viewport height */
-    max-height: calc(100dvh * 0.8);
+    flex: 0 0 80% !important;
+    height: calc(100dvh * 0.8) !important; /* 80% of dynamic viewport height */
+    max-height: calc(100dvh * 0.8) !important;
   }
 
   .tiktok-layout.comments-open .video-container {
-    flex: 0 0 20%;
-    height: calc(100dvh * 0.2); /* 20% of dynamic viewport height */
-    max-height: calc(100dvh * 0.2);
+    flex: 0 0 20% !important;
+    height: calc(100dvh * 0.2) !important; /* 20% of dynamic viewport height */
+    max-height: calc(100dvh * 0.2) !important;
   }
 
   /* Fallback for browsers that support :has() */
   .tiktok-layout:has(.sidebar.open) .video-container {
-    flex: 0 0 20%;
-    height: calc(100dvh * 0.2);
-    max-height: calc(100dvh * 0.2);
+    flex: 0 0 20% !important;
+    height: calc(100dvh * 0.2) !important;
+    max-height: calc(100dvh * 0.2) !important;
   }
 }

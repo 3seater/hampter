@@ -111,10 +111,12 @@ const VideoPlayer = ({ onCommentsClick }: VideoPlayerProps) => {
           <button 
             className="control-button comments-button" 
             onClick={(e) => {
+              e.preventDefault()
               e.stopPropagation()
               onCommentsClick()
             }} 
             title="Comments"
+            type="button"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="white"/>
