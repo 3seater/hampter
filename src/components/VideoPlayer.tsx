@@ -2,11 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import './VideoPlayer.css'
 import tiktokVideo from '../assets/tiktok video/SnapTik-dot-Kim-199a6ac9c3aabdb7c0e12bf558a7186a.mp4'
 
-interface VideoPlayerProps {
-  onCommentsClick?: () => void
-}
-
-const VideoPlayer = ({ onCommentsClick }: VideoPlayerProps) => {
+const VideoPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(true) // Start muted for autoplay
   const [progress, setProgress] = useState(0)
@@ -107,23 +103,6 @@ const VideoPlayer = ({ onCommentsClick }: VideoPlayerProps) => {
 
       {/* Video controls */}
       <div className="video-controls">
-        {onCommentsClick && (
-          <button
-            className="control-button comments-button"
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              onCommentsClick()
-            }}
-            title="Comments"
-            type="button"
-            style={{ touchAction: 'manipulation' }}
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="white"/>
-            </svg>
-          </button>
-        )}
         <button className="control-button mute-button" onClick={toggleMute} title={isMuted ? "Unmute" : "Mute"}>
           {isMuted ? (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

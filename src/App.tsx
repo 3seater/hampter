@@ -52,15 +52,7 @@ function App() {
       <div className={`tiktok-layout ${commentsOpen ? 'comments-open' : ''}`}>
         {/* Main video area */}
         <div className="video-container">
-          <VideoPlayer 
-            onCommentsClick={() => {
-              setCommentsOpen(true)
-              // Focus input after a short delay to ensure sidebar is expanded
-              setTimeout(() => {
-                commentInputRef.current?.focus()
-              }, 300)
-            }} 
-          />
+          <VideoPlayer />
         </div>
 
         {/* Right sidebar with comments */}

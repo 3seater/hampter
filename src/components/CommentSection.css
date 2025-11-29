@@ -492,29 +492,29 @@
 
 /* Mobile - make input relative to container */
 @media (max-width: 768px) {
-  .comment-input-bottom {
-    position: relative;
-    width: 100%;
-    bottom: auto;
-    padding: 12px 16px;
-    padding-bottom: max(12px, env(safe-area-inset-bottom));
-    background: white;
-    border-top: 0.5px solid rgba(22, 24, 35, 0.12);
-  }
+      .comment-input-bottom {
+        position: relative;
+        width: 100%;
+        bottom: auto;
+        padding: 12px 16px;
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+        background: #0d0d0d;
+        border-top: 1px solid #2f2f2f;
+      }
   
-  .comment-text-input {
-    background: rgba(22, 24, 35, 0.06);
-    color: #161823;
-  }
-  
-  .comment-text-input:focus {
-    background: white;
-    border-color: rgba(22, 24, 35, 0.2);
-  }
-  
-  .comment-text-input::placeholder {
-    color: rgba(22, 24, 35, 0.4);
-  }
+      .comment-text-input {
+        background: #1b1b1b;
+        color: white;
+        border: none;
+      }
+
+      .comment-text-input:focus {
+        background: #1b1b1b;
+      }
+
+      .comment-text-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
 }
 
 /* Mobile overlay styling when used inside comments overlay */
