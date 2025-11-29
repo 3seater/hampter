@@ -7,7 +7,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden; /* Prevent any overflow */
+  overflow-y: auto; /* Make entire section scrollable */
+  overflow-x: hidden;
 }
 
 /* Profile Section */
@@ -15,6 +16,8 @@
   padding: 20px;
   flex-shrink: 0;
   background: #0d0d0d;
+  display: block; /* Always visible */
+  min-height: fit-content; /* Ensure it doesn't get crushed */
 }
 
 .profile-content {
@@ -339,20 +342,30 @@
 /* Comments List */
 .comments-list {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: visible; /* Let parent handle scrolling */
   padding: 0;
   padding-bottom: 70px; /* Space for bottom input */
   position: relative;
   min-height: 0; /* Allow flexbox to shrink */
-  max-height: none; /* Allow it to scroll */
 }
 
 @media (max-width: 768px) {
+  .comment-section {
+    overflow-y: auto; /* Make entire section scrollable */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  }
+
+  .profile-section {
+    padding: 16px;
+    display: block !important; /* Always show profile section */
+    flex-shrink: 0;
+    min-height: fit-content;
+  }
+
   .comments-list {
     padding-bottom: 0; /* No extra padding needed on mobile since input is relative */
     min-height: 0; /* Allow flexbox to shrink properly */
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overflow-y: visible; /* Let parent handle scrolling */
   }
 }
 
