@@ -7,6 +7,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  z-index: 1;
 }
 
 .video-element {
@@ -153,10 +154,20 @@
     height: 100%;
     object-fit: cover;
     max-width: 100%;
+    pointer-events: auto;
   }
 
   .video-controls {
     bottom: 16px;
     right: 16px;
+    z-index: 50; /* Higher z-index on mobile */
+    pointer-events: auto; /* Ensure pointer events work */
+    position: relative; /* Ensure it's positioned above video */
+  }
+
+  .control-button {
+    pointer-events: auto !important; /* Force pointer events on mobile */
+    position: relative;
+    z-index: 51;
   }
 }
