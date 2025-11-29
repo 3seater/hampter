@@ -4,17 +4,14 @@ import {
   addDoc, 
   updateDoc, 
   getDoc, 
-  getDocs, 
   query, 
   orderBy, 
-  limit,
   onSnapshot,
   serverTimestamp,
   increment,
   arrayUnion,
   arrayRemove,
-  setDoc,
-  Timestamp
+  setDoc
 } from 'firebase/firestore'
 import { db } from '../config/firebase'
 

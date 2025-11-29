@@ -12,8 +12,7 @@ import {
   toggleCommentLike as toggleCommentLikeFirebase,
   toggleVideoLike,
   toggleVideoBookmark,
-  subscribeToVideoStats,
-  getUserInteractions
+  subscribeToVideoStats
 } from '../services/firebaseService'
 
 interface Comment {
@@ -40,12 +39,6 @@ const CommentSection = ({ username }: CommentSectionProps) => {
     comments: { count: 0 },
     bookmarks: { count: 0, bookmarked: false }
   })
-  const [userInteractions, setUserInteractions] = useState({
-    likedComments: [] as string[],
-    bookmarkedVideo: false,
-    likedVideo: false
-  })
-
   // Subscribe to video stats
   useEffect(() => {
     if (!username) return
@@ -74,20 +67,6 @@ const CommentSection = ({ username }: CommentSectionProps) => {
     return () => unsubscribe()
   }, [username])
 
-  // Load user interactions
-  useEffect(() => {
-    if (!username) return
-
-    getUserInteractions(username).then(interactions => {
-      if (interactions) {
-        setUserInteractions({
-          likedComments: interactions.likedComments || [],
-          bookmarkedVideo: interactions.bookmarkedVideo || false,
-          likedVideo: interactions.likedVideo || false
-        })
-      }
-    })
-  }, [username])
 
   const toggleLike = async () => {
     if (!username) return
