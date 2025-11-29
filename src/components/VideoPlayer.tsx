@@ -4,7 +4,7 @@ import tiktokVideo from '../assets/tiktok video/SnapTik-dot-Kim-199a6ac9c3aabdb7
 
 const VideoPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isMuted, setIsMuted] = useState(false)
+  const [isMuted, setIsMuted] = useState(true) // Start muted for autoplay
   const [progress, setProgress] = useState(0)
   const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -12,13 +12,51 @@ const VideoPlayer = () => {
     const video = videoRef.current
     if (!video) return
 
+    // Ensure video is muted for autoplay
+    video.muted = true
+    setIsMuted(true)
+
+    // Sync playing state with video element
+    const handlePlay = () => setIsPlaying(true)
+    const handlePause = () => setIsPlaying(false)
+    const handleEnded = () => setIsPlaying(false)
+
+    video.addEventListener('play', handlePlay)
+    video.addEventListener('pause', handlePause)
+    video.addEventListener('ended', handleEnded)
+
+    // Autoplay video when loaded
+    const attemptAutoplay = () => {
+      video.muted = true // Must be muted for autoplay
+      video.play().then(() => {
+        setIsPlaying(true)
+      }).catch(() => {
+        // Autoplay failed, will wait for user interaction
+        setIsPlaying(false)
+      })
+    }
+
+    if (video.readyState >= 3) {
+      attemptAutoplay()
+    } else {
+      video.addEventListener('canplay', attemptAutoplay, { once: true })
+      video.addEventListener('loadeddata', attemptAutoplay, { once: true })
+    }
+
     const updateProgress = () => {
       const progress = (video.currentTime / video.duration) * 100
       setProgress(progress)
     }
 
     video.addEventListener('timeupdate', updateProgress)
-    return () => video.removeEventListener('timeupdate', updateProgress)
+    return () => {
+      video.removeEventListener('timeupdate', updateProgress)
+      video.removeEventListener('canplay', attemptAutoplay)
+      video.removeEventListener('loadeddata', attemptAutoplay)
+      video.removeEventListener('play', handlePlay)
+      video.removeEventListener('pause', handlePause)
+      video.removeEventListener('ended', handleEnded)
+    }
   }, [])
 
   const togglePlay = () => {
@@ -55,6 +93,8 @@ const VideoPlayer = () => {
         className="video-element"
         loop
         muted={isMuted}
+        playsInline
+        autoPlay
         onClick={togglePlay}
         src={tiktokVideo}
       >
