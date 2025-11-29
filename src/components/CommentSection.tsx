@@ -31,9 +31,10 @@ interface Comment {
 
 interface CommentSectionProps {
   username: string | null
+  inputRef?: React.RefObject<HTMLInputElement | null>
 }
 
-const CommentSection = ({ username }: CommentSectionProps) => {
+const CommentSection = ({ username, inputRef }: CommentSectionProps) => {
   const [isFollowing, setIsFollowing] = useState(false)
   const [videoStats, setVideoStats] = useState({
     likes: { count: 0, liked: false },
@@ -105,7 +106,8 @@ const CommentSection = ({ username }: CommentSectionProps) => {
   const [commentText, setCommentText] = useState('')
   const [copyButtonText, setCopyButtonText] = useState('Copy link')
   const commentsListRef = useRef<HTMLDivElement>(null)
-  const textInputRef = useRef<HTMLInputElement>(null)
+  const localTextInputRef = useRef<HTMLInputElement>(null)
+  const textInputRef = inputRef || localTextInputRef
 
   const createComment = async (imageUrl?: string, text?: string) => {
     if (!username || (!imageUrl && !text)) return

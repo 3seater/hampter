@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import VideoPlayer from './components/VideoPlayer'
 import CommentSection from './components/CommentSection'
@@ -9,6 +9,8 @@ import { createOrUpdateUser } from './services/firebaseService'
 function App() {
   const [username, setUsername] = useState<string | null>(null)
   const [showUsernameModal, setShowUsernameModal] = useState(false)
+  const [commentsOpen, setCommentsOpen] = useState(false)
+  const commentInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     // Check if user has a username stored
@@ -47,16 +49,25 @@ function App() {
   return (
     <div className="app">
       {/* Desktop layout with video + sidebar */}
-      <div className="tiktok-layout">
+      <div className={`tiktok-layout ${commentsOpen ? 'comments-open' : ''}`}>
         {/* Main video area */}
         <div className="video-container">
-          <VideoPlayer />
+          <VideoPlayer 
+            onCommentsClick={() => {
+              setCommentsOpen(true)
+              // Focus input after a short delay to ensure sidebar is expanded
+              setTimeout(() => {
+                commentInputRef.current?.focus()
+              }, 300)
+            }} 
+          />
         </div>
 
         {/* Right sidebar with comments */}
-        <div className="sidebar">
+        <div className={`sidebar ${commentsOpen ? 'open' : ''}`}>
           <CommentSection 
             username={username}
+            inputRef={commentInputRef}
           />
         </div>
       </div>
