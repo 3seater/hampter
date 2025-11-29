@@ -6,6 +6,15 @@ import jumpToBottomIcon from '../assets/icons/images (2).png'
 import xIcon from '../assets/socials/x2.png'
 import pumpfunIcon from '../assets/socials/pumpfun2.png'
 import knowyourmemeIcon from '../assets/socials/knowyourmeme.png'
+import {
+  addComment,
+  subscribeToComments,
+  toggleCommentLike as toggleCommentLikeFirebase,
+  toggleVideoLike,
+  toggleVideoBookmark,
+  subscribeToVideoStats,
+  getUserInteractions
+} from '../services/firebaseService'
 
 interface Comment {
   id: string
@@ -13,10 +22,12 @@ interface Comment {
   userPfp: string
   imageUrl?: string
   text?: string
-  timestamp: Date
+  timestamp: Date | any
   likes: number
   liked: boolean
+  likedBy?: string[]
   replies: Comment[]
+  parentId?: string
 }
 
 interface CommentSectionProps {
@@ -29,25 +40,65 @@ const CommentSection = ({ username }: CommentSectionProps) => {
     comments: { count: 0 },
     bookmarks: { count: 0, bookmarked: false }
   })
+  const [userInteractions, setUserInteractions] = useState({
+    likedComments: [] as string[],
+    bookmarkedVideo: false,
+    likedVideo: false
+  })
 
-  const toggleLike = () => {
-    setVideoStats(prev => ({
-      ...prev,
-      likes: {
-        liked: !prev.likes.liked,
-        count: prev.likes.liked ? prev.likes.count - 1 : prev.likes.count + 1
+  // Subscribe to video stats
+  useEffect(() => {
+    if (!username) return
+
+    const unsubscribe = subscribeToVideoStats((stats) => {
+      if (stats) {
+        const likedBy = stats.likes?.likedBy || []
+        const bookmarkedBy = stats.bookmarks?.bookmarkedBy || []
+        
+        setVideoStats({
+          likes: {
+            count: stats.likes?.count || 0,
+            liked: likedBy.includes(username)
+          },
+          comments: {
+            count: stats.comments?.count || 0
+          },
+          bookmarks: {
+            count: stats.bookmarks?.count || 0,
+            bookmarked: bookmarkedBy.includes(username)
+          }
+        })
       }
-    }))
+    })
+
+    return () => unsubscribe()
+  }, [username])
+
+  // Load user interactions
+  useEffect(() => {
+    if (!username) return
+
+    getUserInteractions(username).then(interactions => {
+      if (interactions) {
+        setUserInteractions({
+          likedComments: interactions.likedComments || [],
+          bookmarkedVideo: interactions.bookmarkedVideo || false,
+          likedVideo: interactions.likedVideo || false
+        })
+      }
+    })
+  }, [username])
+
+  const toggleLike = async () => {
+    if (!username) return
+    const isLiked = videoStats.likes.liked
+    await toggleVideoLike(username, isLiked)
   }
 
-  const toggleBookmark = () => {
-    setVideoStats(prev => ({
-      ...prev,
-      bookmarks: {
-        bookmarked: !prev.bookmarks.bookmarked,
-        count: prev.bookmarks.bookmarked ? prev.bookmarks.count - 1 : prev.bookmarks.count + 1
-      }
-    }))
+  const toggleBookmark = async () => {
+    if (!username) return
+    const isBookmarked = videoStats.bookmarks.bookmarked
+    await toggleVideoBookmark(username, isBookmarked)
   }
 
   const [comments, setComments] = useState<Comment[]>([])
@@ -61,7 +112,7 @@ const CommentSection = ({ username }: CommentSectionProps) => {
   const commentsListRef = useRef<HTMLDivElement>(null)
   const textInputRef = useRef<HTMLInputElement>(null)
 
-  const createComment = (imageUrl?: string, text?: string) => {
+  const createComment = async (imageUrl?: string, text?: string) => {
     if (!username || (!imageUrl && !text)) return
 
     setIsPosting(true)
@@ -74,49 +125,22 @@ const CommentSection = ({ username }: CommentSectionProps) => {
       localStorage.setItem('hamster_pfp', userPfp)
     }
 
-    setTimeout(() => {
-      const newComment: Comment = {
-        id: Date.now().toString(),
+    try {
+      await addComment({
         username: username,
         userPfp: userPfp!,
         imageUrl: imageUrl,
         text: text,
-        timestamp: new Date(),
-        likes: 0,
-        liked: false,
-        replies: []
-      }
-
-      if (replyingTo) {
-        // Add as a reply
-        setComments(prev => prev.map(comment => {
-          if (comment.id === replyingTo) {
-            return {
-              ...comment,
-              replies: [newComment, ...comment.replies]
-            }
-          }
-          return comment
-        }))
-        setReplyingTo(null)
-        // Update comment count for replies too
-        setVideoStats(prev => ({
-          ...prev,
-          comments: { count: prev.comments.count + 1 }
-        }))
-      } else {
-        // Add as a new comment (append to bottom for chronological order)
-        setComments(prev => [...prev, newComment])
-        // Update comment count
-        setVideoStats(prev => ({
-          ...prev,
-          comments: { count: prev.comments.count + 1 }
-        }))
-      }
+        parentId: replyingTo || undefined
+      })
       
-      setIsPosting(false)
+      setReplyingTo(null)
       setCommentText('')
-    }, 500)
+    } catch (error) {
+      console.error('Error adding comment:', error)
+    } finally {
+      setIsPosting(false)
+    }
   }
 
   const handleHamsterSelect = (imageUrl: string) => {
@@ -157,6 +181,34 @@ const CommentSection = ({ username }: CommentSectionProps) => {
     return () => commentsList.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Subscribe to comments from Firebase
+  useEffect(() => {
+    const unsubscribe = subscribeToComments((firebaseComments) => {
+      // Filter out replies (they'll be nested in parent comments)
+      const topLevelComments = firebaseComments.filter((c: any) => !c.parentId)
+      
+      // Build comment tree with replies
+      const commentsWithReplies = topLevelComments.map((comment: any) => {
+        const replies = firebaseComments
+          .filter((c: any) => c.parentId === comment.id)
+          .map((reply: any) => ({
+            ...reply,
+            liked: (reply.likedBy || []).includes(username || '')
+          }))
+        
+        return {
+          ...comment,
+          liked: (comment.likedBy || []).includes(username || ''),
+          replies: replies
+        }
+      })
+      
+      setComments(commentsWithReplies)
+    })
+
+    return () => unsubscribe()
+  }, [username])
+
   // Auto-scroll to bottom when new comments are added (only if user is at bottom)
   useEffect(() => {
     if (commentsListRef.current && isAtBottom) {
@@ -186,38 +238,17 @@ const CommentSection = ({ username }: CommentSectionProps) => {
     }
   }
 
-  const toggleCommentLike = (commentId: string, isReply: boolean = false, parentId?: string) => {
-    if (isReply && parentId) {
-      setComments(prev => prev.map(comment => {
-        if (comment.id === parentId) {
-          return {
-            ...comment,
-            replies: comment.replies.map(reply => {
-              if (reply.id === commentId) {
-                return {
-                  ...reply,
-                  liked: !reply.liked,
-                  likes: reply.liked ? reply.likes - 1 : reply.likes + 1
-                }
-              }
-              return reply
-            })
-          }
-        }
-        return comment
-      }))
-    } else {
-      setComments(prev => prev.map(comment => {
-        if (comment.id === commentId) {
-          return {
-            ...comment,
-            liked: !comment.liked,
-            likes: comment.liked ? comment.likes - 1 : comment.likes + 1
-          }
-        }
-        return comment
-      }))
-    }
+  const toggleCommentLike = async (commentId: string, isReply: boolean = false, parentId?: string) => {
+    if (!username) return
+    
+    const comment = isReply 
+      ? comments.find(c => c.id === parentId)?.replies.find(r => r.id === commentId)
+      : comments.find(c => c.id === commentId)
+    
+    if (!comment) return
+    
+    const isLiked = comment.liked
+    await toggleCommentLikeFirebase(commentId, username, isLiked)
   }
 
   const toggleReplies = (commentId: string) => {
@@ -232,9 +263,11 @@ const CommentSection = ({ username }: CommentSectionProps) => {
     })
   }
 
-  const formatTimestamp = (timestamp: Date) => {
+  const formatTimestamp = (timestamp: Date | any) => {
+    // Handle Firebase Timestamp
+    const date = timestamp?.toDate ? timestamp.toDate() : (timestamp instanceof Date ? timestamp : new Date(timestamp))
     const now = new Date()
-    const diffMs = now.getTime() - timestamp.getTime()
+    const diffMs = now.getTime() - date.getTime()
     const diffMins = Math.floor(diffMs / (1000 * 60))
 
     if (diffMins < 1) return 'now'

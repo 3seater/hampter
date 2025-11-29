@@ -4,6 +4,7 @@ import VideoPlayer from './components/VideoPlayer'
 import CommentSection from './components/CommentSection'
 import UsernameModal from './components/UsernameModal'
 import { hamsterImages } from './utils/hamsterImages'
+import { createOrUpdateUser } from './services/firebaseService'
 
 function App() {
   const [username, setUsername] = useState<string | null>(null)
@@ -19,14 +20,22 @@ function App() {
     }
   }, [])
 
-  const handleUsernameSet = (newUsername: string) => {
+  const handleUsernameSet = async (newUsername: string) => {
     localStorage.setItem('hamster_username', newUsername)
     
     // Assign a random profile picture from hamster images if they don't have one
-    if (!localStorage.getItem('hamster_pfp')) {
+    let userPfp = localStorage.getItem('hamster_pfp')
+    if (!userPfp) {
       const randomIndex = Math.floor(Math.random() * hamsterImages.length)
-      const randomPfp = hamsterImages[randomIndex].url
-      localStorage.setItem('hamster_pfp', randomPfp)
+      userPfp = hamsterImages[randomIndex].url
+      localStorage.setItem('hamster_pfp', userPfp)
+    }
+    
+    // Save user to Firebase
+    try {
+      await createOrUpdateUser(newUsername, userPfp)
+    } catch (error) {
+      console.error('Error saving user to Firebase:', error)
     }
     
     setUsername(newUsername)
