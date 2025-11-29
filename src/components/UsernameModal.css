@@ -1,0 +1,143 @@
+.username-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+}
+
+.username-modal {
+  background: #1a1a1a;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 400px;
+  width: 90%;
+  border: 1px solid #2f2f2f;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.modal-header h2 {
+  color: white;
+  font-size: 24px;
+  margin: 0 0 8px 0;
+  font-weight: 700;
+}
+
+.modal-header p {
+  color: #8e8e8e;
+  font-size: 16px;
+  margin: 0;
+}
+
+.modal-form {
+  margin-bottom: 24px;
+}
+
+.input-group {
+  margin-bottom: 16px;
+}
+
+.input-group label {
+  display: block;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 16px;
+  background: #2f2f2f;
+  border: 2px solid #404040;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #fe2c55;
+}
+
+.input-group input::placeholder {
+  color: #8e8e8e;
+}
+
+.error-message {
+  color: #fe2c55;
+  font-size: 14px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.submit-btn {
+  background: #fe2c55;
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 160px;
+}
+
+.submit-btn:hover {
+  background: #e6234a;
+  transform: translateY(-1px);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.modal-footer {
+  text-align: center;
+}
+
+.modal-footer p {
+  color: #8e8e8e;
+  font-size: 14px;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .username-modal {
+    padding: 24px;
+    margin: 16px;
+  }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .modal-header p {
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+}

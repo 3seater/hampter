@@ -1,0 +1,268 @@
+.video-player {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #141414;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.video-element {
+  width: 100%;
+  max-width: 540px;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.video-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.profile-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: white;
+  flex: 1;
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid white;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-details {
+  flex: 1;
+}
+
+.username {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.description {
+  font-size: 14px;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.music {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-right: 20px;
+}
+
+.action-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.action-icon {
+  font-size: 28px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.action-button:hover .action-icon {
+  transform: scale(1.1);
+}
+
+.action-count {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  min-width: 48px;
+}
+
+.video-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.control-button {
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: all 0.2s;
+  z-index: 20;
+  padding: 0;
+  outline: none;
+}
+
+.control-button:focus {
+  outline: none;
+  border: none;
+}
+
+.control-button:active {
+  outline: none;
+  border: none;
+}
+
+.control-button svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.control-button:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.05);
+}
+
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.play-button {
+  width: 0;
+  height: 0;
+  border-left: 50px solid white;
+  border-top: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  margin-left: 8px;
+  transition: all 0.2s;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.play-overlay:hover .play-button {
+  transform: scale(1.1);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+}
+
+/* Video Progress Bar */
+.video-progress-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.video-player:hover .video-progress-container {
+  opacity: 1;
+}
+
+.video-progress-container:hover {
+  height: 6px;
+}
+
+.video-progress-bar {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 3px;
+  transition: width 0.1s linear;
+  position: relative;
+}
+
+.video-progress-bar::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.video-progress-container:hover .video-progress-bar::after {
+  opacity: 1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .video-overlay {
+    padding: 16px;
+  }
+
+  .action-buttons {
+    margin-right: 16px;
+  }
+
+  .action-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+  }
+
+  .profile-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .username {
+    font-size: 14px;
+  }
+
+  .description {
+    font-size: 12px;
+  }
+}
