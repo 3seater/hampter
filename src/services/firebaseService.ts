@@ -44,12 +44,30 @@ export const addComment = async (comment: {
 }) => {
   try {
     const commentsRef = collection(db, 'comments')
-    const newComment = {
-      ...comment,
+    
+    // Build comment object, only including defined fields
+    const newComment: any = {
+      username: comment.username,
+      userPfp: comment.userPfp,
       timestamp: serverTimestamp(),
       likes: 0,
       likedBy: [],
       replies: []
+    }
+    
+    // Only add text if it exists
+    if (comment.text) {
+      newComment.text = comment.text
+    }
+    
+    // Only add imageUrl if it exists
+    if (comment.imageUrl) {
+      newComment.imageUrl = comment.imageUrl
+    }
+    
+    // Only add parentId if it exists
+    if (comment.parentId) {
+      newComment.parentId = comment.parentId
     }
     
     const docRef = await addDoc(commentsRef, newComment)
