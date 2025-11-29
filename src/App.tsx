@@ -10,6 +10,11 @@ function App() {
   const [username, setUsername] = useState<string | null>(null)
   const [showUsernameModal, setShowUsernameModal] = useState(false)
   const [commentsOpen, setCommentsOpen] = useState(false)
+
+  // Function to close comments
+  const closeComments = () => {
+    setCommentsOpen(false)
+  }
   const commentInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -60,7 +65,8 @@ function App() {
           <CommentSection
             username={username}
             inputRef={commentInputRef}
-            onOpen={() => {
+            onClose={closeComments}
+            onExpandComments={() => {
               setCommentsOpen(true)
               // Focus input after a short delay to ensure sidebar is expanded
               setTimeout(() => {

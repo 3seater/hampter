@@ -265,6 +265,35 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.close-comments-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+  outline: none;
+}
+
+.close-comments-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.close-comments-btn:focus,
+.close-comments-btn:active {
+  outline: none;
 }
 
 .close-comments-btn {
@@ -315,6 +344,7 @@
   padding-bottom: 70px; /* Space for bottom input */
   position: relative;
   min-height: 0; /* Allow flexbox to shrink */
+  max-height: none; /* Allow it to scroll */
 }
 
 @media (max-width: 768px) {

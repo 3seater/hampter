@@ -32,10 +32,11 @@ interface Comment {
 interface CommentSectionProps {
   username: string | null
   inputRef?: React.RefObject<HTMLInputElement | null>
-  onOpen?: () => void
+  onClose?: () => void
+  onExpandComments?: () => void
 }
 
-const CommentSection = ({ username, inputRef, onOpen }: CommentSectionProps) => {
+const CommentSection = ({ username, inputRef, onClose, onExpandComments }: CommentSectionProps) => {
   const [isFollowing, setIsFollowing] = useState(false)
   const [videoStats, setVideoStats] = useState({
     likes: { count: 0, liked: false },
@@ -330,7 +331,10 @@ const CommentSection = ({ username, inputRef, onOpen }: CommentSectionProps) => 
             <div className="stat-count">{videoStats.likes.count}</div>
           </div>
               <div className="stat-item" onClick={() => {
-                if (onOpen) onOpen()
+                // Open comments for commenting
+                if (onExpandComments) {
+                  onExpandComments()
+                }
               }} style={{ cursor: 'pointer' }}>
                 <div className="stat-icon-wrapper">
                   <svg className="stat-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -371,6 +375,14 @@ const CommentSection = ({ username, inputRef, onOpen }: CommentSectionProps) => 
       {/* Comments header */}
       <div className="comments-header">
         <span className="comments-count">{videoStats.comments.count} comments</span>
+        <button className="close-comments-btn" onClick={() => {
+          // Close comments and return to normal view
+          if (onClose) {
+            onClose()
+          }
+        }}>
+          ✕
+        </button>
       </div>
 
       {/* Comments list */}
