@@ -10,11 +10,15 @@ body {
   background: #000;
   color: white;
   overflow: hidden;
+  /* Safari mobile fix - use dvh for dynamic viewport height */
+  height: 100vh;
+  height: 100dvh;
 }
 
 .app {
   width: 100vw;
-  height: 100vh;
+  height: 100vh; /* Fallback for older browsers */
+  height: 100dvh; /* Dynamic viewport height for Safari mobile */
   background: #141414;
 }
 
@@ -22,7 +26,8 @@ body {
 .tiktok-layout {
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: 100vh; /* Fallback */
+  height: 100dvh; /* Dynamic viewport height for Safari */
 }
 
 .video-container {
@@ -47,39 +52,35 @@ body {
   .tiktok-layout {
     flex-direction: column;
     position: relative;
-    height: 100vh;
+    height: 100vh; /* Fallback */
+    height: 100dvh; /* Dynamic viewport height for Safari */
     overflow: hidden;
   }
 
   .video-container {
-    position: absolute;
-    top: 0;
-    left: 0;
+    flex: 1;
+    position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 0; /* Allow flexbox to shrink */
     z-index: 1;
+    /* Safari mobile fix */
+    height: 60vh; /* Fallback */
+    height: 60dvh; /* Dynamic viewport height */
   }
 
   .sidebar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: relative;
     width: 100%;
-    height: 70vh;
-    max-height: 70vh;
+    height: 40vh; /* Fallback */
+    height: 40dvh; /* Dynamic viewport height - always visible */
+    max-height: 40dvh;
     background: white;
     border-top: 1px solid rgba(22, 24, 35, 0.12);
     border-left: none;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    transform: translateY(100%);
-    transition: transform 0.3s ease-out;
-    z-index: 1000;
+    z-index: 2;
     overflow: hidden;
-  }
-
-  .sidebar.open {
-    transform: translateY(0);
+    flex-shrink: 0;
   }
 }

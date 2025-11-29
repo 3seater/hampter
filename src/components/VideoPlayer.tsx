@@ -2,12 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import './VideoPlayer.css'
 import tiktokVideo from '../assets/tiktok video/SnapTik-dot-Kim-199a6ac9c3aabdb7c0e12bf558a7186a.mp4'
 
-interface VideoPlayerProps {
-  onCommentsClick?: () => void
-  isMobile?: boolean
-}
-
-const VideoPlayer = ({ onCommentsClick, isMobile }: VideoPlayerProps) => {
+const VideoPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -68,13 +63,6 @@ const VideoPlayer = ({ onCommentsClick, isMobile }: VideoPlayerProps) => {
 
       {/* Video controls */}
       <div className="video-controls">
-        {isMobile && onCommentsClick && (
-          <button className="control-button comments-button" onClick={(e) => { e.stopPropagation(); onCommentsClick(); }} title="Comments">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="white"/>
-            </svg>
-          </button>
-        )}
         <button className="control-button mute-button" onClick={toggleMute} title={isMuted ? "Unmute" : "Mute"}>
           {isMuted ? (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

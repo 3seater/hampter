@@ -31,11 +31,9 @@ interface Comment {
 
 interface CommentSectionProps {
   username: string | null
-  onClose?: () => void
-  isMobile?: boolean
 }
 
-const CommentSection = ({ username, onClose, isMobile }: CommentSectionProps) => {
+const CommentSection = ({ username }: CommentSectionProps) => {
   const [isFollowing, setIsFollowing] = useState(false)
   const [videoStats, setVideoStats] = useState({
     likes: { count: 0, liked: false },
@@ -368,13 +366,6 @@ const CommentSection = ({ username, onClose, isMobile }: CommentSectionProps) =>
       {/* Comments header */}
       <div className="comments-header">
         <span className="comments-count">{videoStats.comments.count} comments</span>
-        {isMobile && onClose && (
-          <button className="close-btn" onClick={onClose}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-            </svg>
-          </button>
-        )}
       </div>
 
       {/* Comments list */}

@@ -9,8 +9,6 @@ import { createOrUpdateUser } from './services/firebaseService'
 function App() {
   const [username, setUsername] = useState<string | null>(null)
   const [showUsernameModal, setShowUsernameModal] = useState(false)
-  const [commentsOpen, setCommentsOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
 
   useEffect(() => {
     // Check if user has a username stored
@@ -20,30 +18,7 @@ function App() {
     } else {
       setUsername(storedUsername)
     }
-
-    // Handle window resize
-    const handleResize = () => {
-      const mobile = window.innerWidth <= 768
-      setIsMobile(mobile)
-      if (!mobile) {
-        setCommentsOpen(false)
-      }
-    }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
   }, [])
-
-  useEffect(() => {
-    // Lock body scroll when comments are open on mobile
-    if (commentsOpen && isMobile) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [commentsOpen, isMobile])
 
 
 
@@ -75,18 +50,13 @@ function App() {
       <div className="tiktok-layout">
         {/* Main video area */}
         <div className="video-container">
-          <VideoPlayer 
-            onCommentsClick={isMobile ? () => setCommentsOpen(true) : undefined}
-            isMobile={isMobile}
-          />
+          <VideoPlayer />
         </div>
 
         {/* Right sidebar with comments */}
-        <div className={`sidebar ${commentsOpen && isMobile ? 'open' : ''}`}>
+        <div className="sidebar">
           <CommentSection 
-            username={username} 
-            onClose={isMobile ? () => setCommentsOpen(false) : undefined}
-            isMobile={isMobile}
+            username={username}
           />
         </div>
       </div>
