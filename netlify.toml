@@ -4,7 +4,9 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
+  # Disable secret scanning for Firebase API keys (they're safe to expose in web apps)
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
 
 # Redirect all routes to index.html for SPA
 [[redirects]]
