@@ -761,12 +761,25 @@
   justify-content: center;
   cursor: pointer;
   z-index: 50;
-  transition: all 0.2s;
+  transition: opacity 0.3s ease, transform 0.2s;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   padding: 0;
   margin: 0;
   margin-left: auto; /* Push to right */
   align-self: flex-end; /* Align to right */
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .jump-to-bottom-btn * {
