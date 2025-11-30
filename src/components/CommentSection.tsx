@@ -329,7 +329,7 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
           </div>
           {/* Social sharing icons */}
           <div className="social-sharing">
-            <button className="social-icon-btn" onClick={() => window.open('https://twitter.com/hamptercoin', '_blank')} title="Follow on X">
+            <button className="social-icon-btn" onClick={() => window.open('https://x.com/HampterArmy', '_blank')} title="Follow on X">
               <img src={xIcon} alt="X" />
             </button>
             <button className="social-icon-btn" onClick={() => window.open('https://pump.fun', '_blank')} title="Visit Pump.fun">
