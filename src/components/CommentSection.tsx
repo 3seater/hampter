@@ -109,8 +109,16 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
   const [commentText, setCommentText] = useState('')
   const [copyButtonText, setCopyButtonText] = useState('Copy link')
   const commentsListRef = useRef<HTMLDivElement>(null)
+  const commentSectionRef = useRef<HTMLDivElement>(null)
   const localTextInputRef = useRef<HTMLInputElement>(null)
   const textInputRef = inputRef || localTextInputRef
+
+  // Get the actual scroll container (comment-section on desktop, comments-list on mobile)
+  const getScrollContainer = () => {
+    // On desktop, comment-section is the scroll container
+    // On mobile, comments-list might be, but comment-section handles it
+    return commentSectionRef.current || commentsListRef.current
+  }
 
   const createComment = async (imageUrl?: string, text?: string) => {
     if (!username || (!imageUrl && !text)) return
@@ -158,8 +166,9 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
 
   // Check if user is at bottom of scroll
   const checkIfAtBottom = () => {
-    if (!commentsListRef.current) return false
-    const { scrollTop, scrollHeight, clientHeight } = commentsListRef.current
+    const scrollContainer = getScrollContainer()
+    if (!scrollContainer) return false
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainer
     // Consider "at bottom" if within 50px of the bottom
     const isAtBottom = scrollHeight - scrollTop - clientHeight < 50
     setIsAtBottom(isAtBottom)
@@ -169,8 +178,8 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
 
   // Handle scroll events and initial check
   useEffect(() => {
-    const commentsList = commentsListRef.current
-    if (!commentsList) return
+    const scrollContainer = getScrollContainer()
+    if (!scrollContainer) return
 
     // Initial check
     checkIfAtBottom()
@@ -179,8 +188,8 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
       checkIfAtBottom()
     }
 
-    commentsList.addEventListener('scroll', handleScroll)
-    return () => commentsList.removeEventListener('scroll', handleScroll)
+    scrollContainer.addEventListener('scroll', handleScroll)
+    return () => scrollContainer.removeEventListener('scroll', handleScroll)
   }, [])
 
   // Subscribe to comments from Firebase
@@ -213,24 +222,30 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
 
   // Auto-scroll to bottom when new comments are added (only if user is at bottom)
   useEffect(() => {
-    if (commentsListRef.current && isAtBottom) {
-      commentsListRef.current.scrollTo({
-        top: commentsListRef.current.scrollHeight,
-        behavior: 'smooth'
+    const scrollContainer = getScrollContainer()
+    if (scrollContainer && isAtBottom && comments.length > 0) {
+      // Use requestAnimationFrame to ensure DOM is updated
+      requestAnimationFrame(() => {
+        if (scrollContainer) {
+          scrollContainer.scrollTo({
+            top: scrollContainer.scrollHeight,
+            behavior: 'smooth'
+          })
+          // Update state after scroll
+          setTimeout(() => {
+            checkIfAtBottom() // Re-check position after scroll
+          }, 300)
+        }
       })
-      // Update state after scroll
-      setTimeout(() => {
-        setIsAtBottom(true)
-        setShowJumpToBottom(false)
-      }, 300)
     }
-  }, [comments, isAtBottom])
+  }, [comments, isAtBottom]) // Trigger on comments array changes
 
   // Jump to bottom function
   const jumpToBottom = () => {
-    if (commentsListRef.current) {
-      commentsListRef.current.scrollTo({
-        top: commentsListRef.current.scrollHeight,
+    const scrollContainer = getScrollContainer()
+    if (scrollContainer) {
+      scrollContainer.scrollTo({
+        top: scrollContainer.scrollHeight,
         behavior: 'smooth'
       })
       setTimeout(() => {
@@ -289,7 +304,7 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
   }
 
   return (
-    <div className="comment-section">
+    <div className="comment-section" ref={commentSectionRef}>
       {/* Minimize button - always at top, centered */}
       {onMinimize && (
         <button 

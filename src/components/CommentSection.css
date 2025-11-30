@@ -390,7 +390,7 @@
   flex: 1;
   overflow-y: visible; /* Let parent handle scrolling */
   padding: 0;
-  padding-bottom: 70px; /* Space for bottom input */
+  padding-bottom: 100px; /* Extra space for bottom input and to ensure latest comment is fully visible */
   position: relative;
   min-height: 0; /* Allow flexbox to shrink */
 }
@@ -741,7 +741,7 @@
 .jump-to-bottom-btn {
   position: fixed;
   bottom: 90px;
-  right: 20px;
+  right: calc(455px + 20px); /* Desktop: sidebar width + margin */
   width: 44px;
   height: 44px;
   background: #1b1b1b;
