@@ -332,7 +332,7 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
             <button className="social-icon-btn" onClick={() => window.open('https://x.com/HampterArmy', '_blank')} title="Follow on X">
               <img src={xIcon} alt="X" />
             </button>
-            <button className="social-icon-btn" onClick={() => window.open('https://pump.fun', '_blank')} title="Visit Pump.fun">
+            <button className="social-icon-btn" onClick={() => window.open('https://pump.fun/coin/BYRMaURv8xUMuPRrA5y2eHtPVbapHuVUsDjSBcKUpump', '_blank')} title="Visit Pump.fun">
               <img src={pumpfunIcon} alt="Pump.fun" />
             </button>
             <button className="social-icon-btn" onClick={() => window.open('https://knowyourmeme.com/memes/almarts27-hamster', '_blank')} title="Know Your Meme - Almarts27 Hamster">
