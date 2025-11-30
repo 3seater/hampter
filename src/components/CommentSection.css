@@ -739,9 +739,9 @@
 
 /* Jump to bottom button */
 .jump-to-bottom-btn {
-  position: fixed;
-  bottom: 90px;
-  right: calc(455px + 20px); /* Desktop: sidebar width + margin */
+  position: absolute;
+  bottom: 80px; /* Position above comment input */
+  right: 20px;
   width: 44px;
   height: 44px;
   background: #1b1b1b;
@@ -771,6 +771,7 @@
 @media (max-width: 768px) {
   .jump-to-bottom-btn {
     right: 20px;
+    bottom: 80px; /* Position above comment input on mobile too */
   }
 }
 
