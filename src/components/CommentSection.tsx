@@ -416,7 +416,7 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
       </div>
 
       {/* Comments list */}
-      <div className="comments-list" ref={commentsListRef}>
+      <div className="comments-list" ref={commentsListRef} style={{ position: 'relative' }}>
         {comments.map((comment) => (
           <div key={comment.id}>
             <div className="comment-item">
@@ -529,9 +529,13 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
         ))}
       </div>
 
-      {/* Jump to bottom button */}
+      {/* Jump to bottom button - sticky at bottom right of comment section */}
       {showJumpToBottom && (
-        <button className="jump-to-bottom-btn" onClick={jumpToBottom} title="Jump to bottom">
+        <button 
+          className="jump-to-bottom-btn" 
+          onClick={jumpToBottom} 
+          title="Jump to bottom"
+        >
           <img src={jumpToBottomIcon} alt="Jump to bottom" />
         </button>
       )}
