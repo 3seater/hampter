@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react'
 import './CommentSection.css'
 import HamsterPicker from './HamsterPicker'
 import { hamsterImages } from '../utils/hamsterImages'
-import jumpToBottomIcon from '../assets/icons/images (2).png'
 import xIcon from '../assets/socials/x2.png'
 import pumpfunIcon from '../assets/socials/pumpfun2.png'
 import knowyourmemeIcon from '../assets/socials/knowyourmeme.png'
@@ -104,8 +103,6 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
   const [expandedReplies, setExpandedReplies] = useState<Set<string>>(new Set())
   const [showHamsterPicker, setShowHamsterPicker] = useState(false)
   const [isPosting, setIsPosting] = useState(false)
-  const [isAtBottom, setIsAtBottom] = useState(true)
-  const [showJumpToBottom, setShowJumpToBottom] = useState(false)
   const [commentText, setCommentText] = useState('')
   const [copyButtonText, setCopyButtonText] = useState('Copy link')
   const commentsListRef = useRef<HTMLDivElement>(null)
@@ -164,40 +161,14 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
     }
   }
 
-  // Check if user is at bottom of scroll
-  const checkIfAtBottom = () => {
-    const scrollContainer = getScrollContainer()
-    if (!scrollContainer) return false
-    const { scrollTop, scrollHeight, clientHeight } = scrollContainer
-    // Consider "at bottom" if within 50px of the bottom
-    const isAtBottom = scrollHeight - scrollTop - clientHeight < 50
-    setIsAtBottom(isAtBottom)
-    setShowJumpToBottom(!isAtBottom)
-    return isAtBottom
-  }
 
-  // Handle scroll events and initial check
-  useEffect(() => {
-    const scrollContainer = getScrollContainer()
-    if (!scrollContainer) return
-
-    // Initial check
-    checkIfAtBottom()
-
-    const handleScroll = () => {
-      checkIfAtBottom()
-    }
-
-    scrollContainer.addEventListener('scroll', handleScroll)
-    return () => scrollContainer.removeEventListener('scroll', handleScroll)
-  }, [])
 
   // Subscribe to comments from Firebase
   useEffect(() => {
     const unsubscribe = subscribeToComments((firebaseComments) => {
       // Filter out replies (they'll be nested in parent comments)
       const topLevelComments = firebaseComments.filter((c: any) => !c.parentId)
-      
+
       // Build comment tree with replies
       const commentsWithReplies = topLevelComments.map((comment: any) => {
         const replies = firebaseComments
@@ -206,24 +177,24 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
             ...reply,
             liked: (reply.likedBy || []).includes(username || '')
           }))
-        
+
         return {
           ...comment,
           liked: (comment.likedBy || []).includes(username || ''),
           replies: replies
         }
       })
-      
+
       setComments(commentsWithReplies)
     })
 
     return () => unsubscribe()
   }, [username])
 
-  // Auto-scroll to bottom when new comments are added (only if user is at bottom)
+  // Auto-scroll to bottom when new comments are added
   useEffect(() => {
     const scrollContainer = getScrollContainer()
-    if (scrollContainer && isAtBottom && comments.length > 0) {
+    if (scrollContainer && comments.length > 0) {
       // Use requestAnimationFrame to ensure DOM is updated
       requestAnimationFrame(() => {
         if (scrollContainer) {
@@ -231,29 +202,11 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
             top: scrollContainer.scrollHeight,
             behavior: 'smooth'
           })
-          // Update state after scroll
-          setTimeout(() => {
-            checkIfAtBottom() // Re-check position after scroll
-          }, 300)
         }
       })
     }
-  }, [comments, isAtBottom]) // Trigger on comments array changes
+  }, [comments]) // Trigger on comments array changes
 
-  // Jump to bottom function
-  const jumpToBottom = () => {
-    const scrollContainer = getScrollContainer()
-    if (scrollContainer) {
-      scrollContainer.scrollTo({
-        top: scrollContainer.scrollHeight,
-        behavior: 'smooth'
-      })
-      setTimeout(() => {
-        setIsAtBottom(true)
-        setShowJumpToBottom(false)
-      }, 300)
-    }
-  }
 
   const toggleCommentLike = async (commentId: string, isReply: boolean = false, parentId?: string) => {
     if (!username) return
@@ -532,16 +485,6 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
       {/* Comment input at bottom - TikTok style */}
       {username && (
         <div style={{ position: 'relative' }}>
-          {/* Jump to bottom button - positioned at bottom right above Post button */}
-          {showJumpToBottom && (
-            <button 
-              className="jump-to-bottom-btn" 
-              onClick={jumpToBottom} 
-              title="Jump to bottom"
-            >
-              <img src={jumpToBottomIcon} alt="Jump to bottom" />
-            </button>
-          )}
           <form className="comment-input-bottom" onSubmit={handleTextSubmit}>
             <input
               ref={textInputRef}
