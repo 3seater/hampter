@@ -325,12 +325,8 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
           </div>
 
           <div className="caption">
-            <span className="hashtag">#hampter</span>
-          </div>
-
-          <div className="sound-info">
-            <span className="music-icon">♪</span>
-            <span className="sound-text">original sound - Yuwos - 4$Welz</span>
+            <div>the future of rodent finance</div>
+            <div className="hashtag">#hampter</div>
           </div>
         </div>
 
