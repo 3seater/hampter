@@ -5,9 +5,7 @@
   display: flex;
   flex-direction: column;
   position: relative; /* For absolute positioning of minimize button */
-  overflow-y: auto; /* Make entire section scrollable */
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  overflow: hidden; /* Prevent scrolling on main container */
 }
 
 /* Ensure jump button container is flex */
@@ -71,6 +69,9 @@
   min-height: fit-content; /* Ensure it doesn't get crushed */
   width: 100%;
   box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 
 .profile-content {
@@ -395,20 +396,21 @@
 /* Comments List */
 .comments-list {
   flex: 1;
-  overflow-y: visible; /* Let parent handle scrolling */
+  overflow-y: auto; /* Make comments list scrollable */
+  overflow-x: hidden;
   padding: 0;
   padding-bottom: 120px; /* Space for fixed input and to ensure latest comment is fully visible */
   position: relative;
   min-height: 0; /* Allow flexbox to shrink */
   display: flex;
   flex-direction: column;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 @media (max-width: 768px) {
   .comment-section {
     height: 100%;
-    overflow-y: auto; /* Make entire section scrollable */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overflow: hidden; /* Prevent scrolling on main container */
     display: flex;
     flex-direction: column;
     position: relative; /* For absolute positioning of minimize button */
@@ -450,7 +452,9 @@
     flex: 1;
     padding-bottom: 0; /* No extra padding needed on mobile since input is relative */
     min-height: 0; /* Allow flexbox to shrink properly */
-    overflow-y: visible; /* Let parent handle scrolling */
+    overflow-y: auto; /* Make comments list scrollable */
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     order: 3; /* Appears after header */
   }
 

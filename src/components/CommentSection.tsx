@@ -110,11 +110,9 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
   const localTextInputRef = useRef<HTMLInputElement>(null)
   const textInputRef = inputRef || localTextInputRef
 
-  // Get the actual scroll container (comment-section on desktop, comments-list on mobile)
+  // Get the actual scroll container (comments-list is now always the scroll container)
   const getScrollContainer = () => {
-    // On desktop, comment-section is the scroll container
-    // On mobile, comments-list might be, but comment-section handles it
-    return commentSectionRef.current || commentsListRef.current
+    return commentsListRef.current
   }
 
   const createComment = async (imageUrl?: string, text?: string) => {
