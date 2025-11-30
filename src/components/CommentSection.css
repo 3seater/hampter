@@ -748,7 +748,7 @@
 
 /* Jump to bottom button */
 .jump-to-bottom-btn {
-  position: sticky;
+  position: absolute;
   bottom: 80px; /* Position above comment input */
   right: 20px;
   width: 44px;
@@ -765,10 +765,9 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   padding: 0;
   margin: 0;
-  margin-left: auto; /* Push to right */
-  align-self: flex-end; /* Align to right */
   opacity: 0;
   animation: fadeIn 0.3s ease forwards;
+  pointer-events: auto;
 }
 
 @keyframes fadeIn {
@@ -788,14 +787,14 @@
 
 @media (max-width: 1024px) {
   .jump-to-bottom-btn {
-    right: calc(380px + 20px); /* Responsive sidebar width + margin */
+    right: 20px;
   }
 }
 
 @media (max-width: 768px) {
   .jump-to-bottom-btn {
-    right: 20px; /* Mobile: just margin from right edge */
-    bottom: 80px; /* Position above comment input on mobile too */
+    right: 20px;
+    bottom: 80px; /* Position above comment input on mobile */
   }
 }
 
