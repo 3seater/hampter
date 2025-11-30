@@ -397,7 +397,7 @@
   flex: 1;
   overflow-y: visible; /* Let parent handle scrolling */
   padding: 0;
-  padding-bottom: 100px; /* Extra space for bottom input and to ensure latest comment is fully visible */
+  padding-bottom: 140px; /* Extra space for bottom input and to ensure latest comment is fully visible */
   position: relative;
   min-height: 0; /* Allow flexbox to shrink */
   display: flex;
@@ -748,9 +748,9 @@
 
 /* Jump to bottom button */
 .jump-to-bottom-btn {
-  position: fixed;
-  bottom: 80px; /* Position above comment input */
-  right: 20px; /* 20px from right edge of sidebar */
+  position: absolute;
+  bottom: 60px; /* Position above Post button */
+  right: 20px; /* Align with Post button on right */
   width: 44px;
   height: 44px;
   background: #1b1b1b;
@@ -770,9 +770,11 @@
   pointer-events: auto;
 }
 
-/* Desktop: position relative to sidebar */
+/* Desktop: fixed positioning relative to sidebar */
 @media (min-width: 769px) {
   .jump-to-bottom-btn {
+    position: fixed;
+    bottom: 60px;
     right: calc(100vw - 455px + 20px); /* Desktop: account for 455px sidebar width */
   }
 }

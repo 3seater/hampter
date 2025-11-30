@@ -529,55 +529,56 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
         ))}
       </div>
 
-      {/* Jump to bottom button - positioned at bottom right above input */}
-      {showJumpToBottom && (
-        <button 
-          className="jump-to-bottom-btn" 
-          onClick={jumpToBottom} 
-          title="Jump to bottom"
-        >
-          <img src={jumpToBottomIcon} alt="Jump to bottom" />
-        </button>
-      )}
-
       {/* Comment input at bottom - TikTok style */}
       {username && (
-        <form className="comment-input-bottom" onSubmit={handleTextSubmit}>
-          <input
-            ref={textInputRef}
-            type="text"
-            className="comment-text-input"
-            placeholder={replyingTo ? "Add reply..." : "Add comment..."}
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-          />
-          <button
-            type="button"
-            className="comment-image-btn"
-            onClick={() => setShowHamsterPicker(true)}
-            title="Add image"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21 19V5C21 3.9 20.1 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19ZM8.5 13.5L11 16.51L14.5 12L19 18H5L8.5 13.5Z" fill="white"/>
-            </svg>
-          </button>
-          <button
-            type="submit"
-            className="comment-post-btn"
-            disabled={!commentText.trim() || isPosting}
-          >
-            Post
-          </button>
-          {replyingTo && (
+        <div style={{ position: 'relative' }}>
+          {/* Jump to bottom button - positioned at bottom right above Post button */}
+          {showJumpToBottom && (
             <button 
-              type="button"
-              className="cancel-reply-btn"
-              onClick={() => setReplyingTo(null)}
+              className="jump-to-bottom-btn" 
+              onClick={jumpToBottom} 
+              title="Jump to bottom"
             >
-              ✕
+              <img src={jumpToBottomIcon} alt="Jump to bottom" />
             </button>
           )}
-        </form>
+          <form className="comment-input-bottom" onSubmit={handleTextSubmit}>
+            <input
+              ref={textInputRef}
+              type="text"
+              className="comment-text-input"
+              placeholder={replyingTo ? "Add reply..." : "Add comment..."}
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+            />
+            <button
+              type="button"
+              className="comment-image-btn"
+              onClick={() => setShowHamsterPicker(true)}
+              title="Add image"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 19V5C21 3.9 20.1 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19ZM8.5 13.5L11 16.51L14.5 12L19 18H5L8.5 13.5Z" fill="white"/>
+              </svg>
+            </button>
+            <button
+              type="submit"
+              className="comment-post-btn"
+              disabled={!commentText.trim() || isPosting}
+            >
+              Post
+            </button>
+            {replyingTo && (
+              <button 
+                type="button"
+                className="cancel-reply-btn"
+                onClick={() => setReplyingTo(null)}
+              >
+                ✕
+              </button>
+            )}
+          </form>
+        </div>
       )}
 
       {/* Hamster picker modal */}
