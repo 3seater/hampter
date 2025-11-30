@@ -775,13 +775,13 @@
 
 @media (max-width: 1024px) {
   .jump-to-bottom-btn {
-    right: 20px;
+    right: calc(380px + 20px); /* Responsive sidebar width + margin */
   }
 }
 
 @media (max-width: 768px) {
   .jump-to-bottom-btn {
-    right: 20px;
+    right: 20px; /* Mobile: just margin from right edge */
     bottom: 80px; /* Position above comment input on mobile too */
   }
 }

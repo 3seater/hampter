@@ -305,6 +305,16 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
 
   return (
     <div className="comment-section" ref={commentSectionRef}>
+      {/* Jump to bottom button - sticky at bottom right of comment section */}
+      {showJumpToBottom && (
+        <button 
+          className="jump-to-bottom-btn" 
+          onClick={jumpToBottom} 
+          title="Jump to bottom"
+        >
+          <img src={jumpToBottomIcon} alt="Jump to bottom" />
+        </button>
+      )}
       {/* Minimize button - always at top, centered */}
       {onMinimize && (
         <button 
@@ -528,17 +538,6 @@ const CommentSection = ({ username, inputRef, onClose, onMinimize, onExpandComme
           </div>
         ))}
       </div>
-
-      {/* Jump to bottom button - sticky at bottom right of comment section */}
-      {showJumpToBottom && (
-        <button 
-          className="jump-to-bottom-btn" 
-          onClick={jumpToBottom} 
-          title="Jump to bottom"
-        >
-          <img src={jumpToBottomIcon} alt="Jump to bottom" />
-        </button>
-      )}
 
       {/* Comment input at bottom - TikTok style */}
       {username && (
